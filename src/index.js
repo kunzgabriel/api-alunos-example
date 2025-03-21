@@ -5,13 +5,10 @@ const app = express();
 // cria uma constante para definir a PORTA onde a aplicação roda;
 const PORT = 3000;
 
-app.use(express.json());
+const logger = require('./middlewares/logger')
 
-// cria um método de ROUTE que ao acessar a raiz
-// com metodo GET, retorna "OLÁ MUNDO!"
-// app.get('/', (req, res) => {
-//   return res.send('OLÁ MUNDO!');
-// });
+app.use(express.json());
+app.use(logger)
 
 app.get('/', (req, res) => {
   const hello = {
