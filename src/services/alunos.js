@@ -16,12 +16,35 @@ function buscarAlunoPorId (id) {
   return alunos.find(el => el.id == id);
 }
 
+function buscarAlunoPorNome (nome) {
+  return alunos.find(el => el.nome == nome)
+}
+
 function cadastrarAluno (dados) {
   alunos.push(dados)
+}
+
+function atualizarAluno (dados) {
+  const alunoExiste = buscarAlunoPorId(dados.id);
+  if (!alunoExiste) {
+    return 'erro';
+  }
+
+  if (Object.hasOwn(dados, 'idade')) {
+    alunoExiste.idade = dados.idade;
+  }
+
+  if (Object.hasOwn(dados, 'nome')) {
+    alunoExiste.nome = dados.nome;
+  }
+
+  return alunoExiste;
 }
 
 module.exports = {
   buscarAlunos,
   buscarAlunoPorId,
-  cadastrarAluno
+  buscarAlunoPorNome,
+  cadastrarAluno,
+  atualizarAluno
 }
