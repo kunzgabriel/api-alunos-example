@@ -1,7 +1,7 @@
 const service = require('../services/alunos');
 
 function buscarAlunos (req, res) {
-  const alunos = service.buscarAlunos();
+  const alunos = service.buscarAlunos(req.query);
   return res.status(200).json(alunos);
 }
 
@@ -10,6 +10,16 @@ function buscarAlunoPorId (req, res) {
   if (!aluno) {
     return res.status(404).json({
       erro: `O aluno com id ${req.params.id} não foi encontrado`
+    })
+  }
+  return res.status(200).json(aluno);
+}
+
+function buscarAlunoPorNome (req, res) {
+  const aluno = service.buscarAlunoPorNome(req.query.nome);
+  if (!aluno) {
+    return res.status(404).json({
+      erro: `O aluno com nome ${req.query.nome} não foi encontrado`
     })
   }
   return res.status(200).json(aluno);
@@ -29,8 +39,26 @@ function cadastrarAluno (req, res) {
   })
 }
 
+async function atualizarAluno (req, res) {
+  const data = {
+    ...req.body,
+    id: req.params.id
+  }
+
+  if (!Object.hasOwn(data, 'nome') && !Object.hasOwn(data, 'idade')) {
+    return res.status(400).json({
+      message: 'informe ao menos um campo para atualizar o dado'
+    })
+  }
+
+  const aluno = service.atualizarAluno(data)
+  return res.status(200).json(aluno)
+}
+
 module.exports = {
   buscarAlunos,
   buscarAlunoPorId,
-  cadastrarAluno
+  cadastrarAluno,
+  buscarAlunoPorNome,
+  atualizarAluno
 }
